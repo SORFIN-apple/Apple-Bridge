@@ -1,0 +1,17 @@
+name: AppleBridge
+version: 1.0.0
+main: dev.applebridge.AppleBridgePlugin
+api-version: '${plugin.api.version}'
+authors: [OpenAI]
+description: HTTP API for executing Minecraft server commands
+
+commands:
+  applebridge:
+    description: Управление AppleBridge API
+    usage: /applebridge <reload|status>
+    permission: applebridge.admin
+
+permissions:
+  applebridge.admin:
+    description: Доступ к управлению AppleBridge
+    default: op

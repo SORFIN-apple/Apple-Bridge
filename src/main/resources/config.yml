@@ -1,0 +1,4 @@
+enabled: true
+port: 8080
+secret: "CHANGE_ME"
+log-buffer-size: 200

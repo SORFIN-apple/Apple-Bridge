@@ -1,0 +1,24 @@
+# Build output
+/target/
+
+# Local tools and temp folders
+/.tools/
+/.agents/
+
+# Node test bot
+/discord-test-bot/
+/discord-test-bot/node_modules/
+/discord-test-bot/package-lock.json
+
+# Python test bot
+/python-test-bot/
+/python-test-bot/.venv/
+/python-test-bot/__pycache__/
+*.pyc
+
+# IDE and OS files
+.idea/
+.vscode/
+*.iml
+Thumbs.db
+.DS_Store

@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.applebridge</groupId>
+    <artifactId>AppleBridge-Paper</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>AppleBridge</name>
+    <description>HTTP API bridge for Paper servers</description>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <server.api.groupId>io.papermc.paper</server.api.groupId>
+        <server.api.artifactId>paper-api</server.api.artifactId>
+        <server.api.version>1.19.4-R0.1-SNAPSHOT</server.api.version>
+        <plugin.api.version>1.19</plugin.api.version>
+        <project.build.finalName>AppleBridge-Paper-1.19.x-1.21.x-${project.version}</project.build.finalName>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>papermc-repo</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>${server.api.groupId}</groupId>
+            <artifactId>${server.api.artifactId}</artifactId>
+            <version>${server.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.build.finalName}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>plugin.yml</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>plugin.yml</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>paper-1.16-1.18</id>
+            <properties>
+                <maven.compiler.release>16</maven.compiler.release>
+                <server.api.groupId>org.spigotmc</server.api.groupId>
+                <server.api.artifactId>spigot-api</server.api.artifactId>
+                <server.api.version>1.16.5-R0.1-SNAPSHOT</server.api.version>
+                <plugin.api.version>1.16</plugin.api.version>
+                <project.build.finalName>AppleBridge-Paper-1.16.x-1.18.x-${project.version}</project.build.finalName>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>spigotmc-snapshots</id>
+                    <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+</project>
