@@ -337,4 +337,4 @@ Check:
 
 ## License
 
-This project is released under the `MIT License`.
+This project is released under the `Apache License 2.0`.

@@ -1,0 +1,171 @@
+# AppleBridge Paper
+
+`AppleBridge Paper` is a lightweight plugin for Minecraft servers running on `Paper`.
+
+It exposes a secure HTTP API that allows external tools such as Discord bots, scripts, and private panels to:
+- execute Minecraft console commands
+- read recent server log lines
+- automate server actions remotely
+
+The plugin does **not** include Discord code by itself.  
+It is the HTTP bridge between Minecraft and your external tools.
+
+## Features
+
+- Lightweight built-in HTTP API
+- `POST /execute` for remote command execution
+- `GET /logs` for recent console log output
+- `Authorization` header protection
+- `/applebridge reload`
+- `/applebridge status`
+
+## Compatibility
+
+Available builds:
+- `1.16.x-1.18.x`
+- `1.19.x-1.21.x`
+
+Tested on:
+- `1.16.5`
+- `1.17.1`
+- `1.18.2`
+- `1.19.4`
+- `1.20.6`
+- `1.21.x`
+
+Should also work on `Purpur` for the same version ranges.
+
+## Installation
+
+1. Download the correct jar for your server version.
+2. Put it into the `plugins/` folder.
+3. Start the server.
+4. Open `plugins/AppleBridge/config.yml`.
+5. Configure the API and secret token.
+6. Restart the server or run `/applebridge reload`.
+
+## Default config
+
+```yml
+enabled: true
+port: 8080
+secret: "CHANGE_ME"
+log-buffer-size: 200
+```
+
+## Configuration
+
+### `enabled`
+Enables or disables the API.
+
+### `port`
+The HTTP port used by AppleBridge.
+
+Example:
+```text
+http://127.0.0.1:8080/execute
+```
+
+### `secret`
+The token required in the `Authorization` header.
+
+If left as `CHANGE_ME`, the plugin will generate a random secret automatically.
+
+### `log-buffer-size`
+Size of the in-memory recent log buffer.
+
+## Commands
+
+- `/applebridge reload` — reload config and restart API
+- `/applebridge status` — show API status
+
+## API
+
+## `POST /execute`
+
+Executes a command through the Minecraft console.
+
+Example body:
+```json
+{
+  "command": "say hello"
+}
+```
+
+Required header:
+```text
+Authorization: YOUR_SECRET
+```
+
+Successful response:
+```text
+OK
+```
+
+## `GET /logs`
+
+Returns recent server log lines.
+
+Example:
+```text
+GET /logs?limit=20
+```
+
+Notes:
+- `limit` is optional
+- default is `50`
+- maximum is `200`
+
+## PowerShell examples
+
+### Execute a command
+
+```powershell
+Invoke-RestMethod -Uri 'http://127.0.0.1:8080/execute' `
+  -Method POST `
+  -Headers @{ Authorization = 'YOUR_SECRET' } `
+  -ContentType 'application/json' `
+  -Body '{"command":"say hello from api"}'
+```
+
+### Read recent logs
+
+```powershell
+Invoke-RestMethod -Uri 'http://127.0.0.1:8080/logs?limit=20' `
+  -Method GET `
+  -Headers @{ Authorization = 'YOUR_SECRET' }
+```
+
+## Security
+
+Because this plugin can execute console commands, you should always:
+- use a strong random secret
+- never publish the secret
+- restrict access in your bot or external tool
+- avoid exposing the API publicly unless necessary
+
+If possible:
+- run the bot and Minecraft on the same machine
+- use `127.0.0.1`
+- restrict firewall access by IP
+
+## Common issues
+
+### `403 Forbidden`
+Usually means the `Authorization` token is wrong.
+
+### Timeout
+Check:
+- correct IP or domain
+- correct port
+- whether the port is open
+- whether the server is running
+
+### Commands do not execute
+Check:
+- the command is valid
+- it works manually from the server console
+
+## License
+
+This project is released under the `Apache License 2.0`.
