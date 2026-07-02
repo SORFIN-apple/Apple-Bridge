@@ -2,7 +2,7 @@ name: AppleBridge
 version: 1.0.0
 main: dev.applebridge.AppleBridgePlugin
 api-version: '${plugin.api.version}'
-authors: [OpenAI]
+authors: [SORFIN]
 description: HTTP API for executing Minecraft server commands
 
 commands:
