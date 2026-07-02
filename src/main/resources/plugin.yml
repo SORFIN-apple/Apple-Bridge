@@ -7,11 +7,11 @@ description: HTTP API for executing Minecraft server commands
 
 commands:
   applebridge:
-    description: Управление AppleBridge API
+    description: Manage the AppleBridge API
     usage: /applebridge <reload|status>
     permission: applebridge.admin
 
 permissions:
   applebridge.admin:
-    description: Доступ к управлению AppleBridge
+    description: Access to AppleBridge management commands
     default: op

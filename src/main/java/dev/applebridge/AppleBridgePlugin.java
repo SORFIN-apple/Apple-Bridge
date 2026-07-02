@@ -12,11 +12,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -69,7 +69,7 @@ public final class AppleBridgePlugin extends JavaPlugin {
         }
 
         if (args.length == 0) {
-            sender.sendMessage("§cИспользование: /applebridge <reload|status>");
+            sender.sendMessage("§cUsage: /applebridge <reload|status>");
             return true;
         }
 
@@ -78,7 +78,7 @@ public final class AppleBridgePlugin extends JavaPlugin {
             reloadConfig();
             ensureSecret();
             restartApiServer();
-            sender.sendMessage("§aAppleBridge config перезагружен.");
+            sender.sendMessage("§aAppleBridge config reloaded.");
             return true;
         }
 
@@ -95,7 +95,7 @@ public final class AppleBridgePlugin extends JavaPlugin {
             return true;
         }
 
-        sender.sendMessage("§cНеизвестная подкоманда. Использование: /applebridge <reload|status>");
+        sender.sendMessage("§cUnknown subcommand. Usage: /applebridge <reload|status>");
         return true;
     }
 
@@ -126,7 +126,7 @@ public final class AppleBridgePlugin extends JavaPlugin {
                 httpExecutor.shutdownNow();
                 httpExecutor = null;
             }
-            getLogger().severe("Не удалось запустить AppleBridge API: " + exception.getMessage());
+            getLogger().severe("Failed to start AppleBridge API: " + exception.getMessage());
         }
     }
 
@@ -148,7 +148,7 @@ public final class AppleBridgePlugin extends JavaPlugin {
             String generatedSecret = generateSecret();
             getConfig().set("secret", generatedSecret);
             saveConfig();
-            getLogger().info("Сгенерирован новый secret для AppleBridge API.");
+            getLogger().info("Generated a new secret for AppleBridge API.");
         }
     }
 
@@ -233,7 +233,7 @@ public final class AppleBridgePlugin extends JavaPlugin {
                 int fromIndex = Math.max(0, fileLines.size() - limit);
                 return fileLines.subList(fromIndex, fileLines.size());
             } catch (IOException exception) {
-                getLogger().warning("Не удалось прочитать logs/latest.log: " + exception.getMessage());
+                getLogger().warning("Failed to read logs/latest.log: " + exception.getMessage());
             }
         }
 
@@ -277,7 +277,6 @@ public final class AppleBridgePlugin extends JavaPlugin {
     }
 
     private boolean dispatchServerCommand(String command) throws ExecutionException, InterruptedException {
-        // Команда должна выполняться в основном потоке сервера.
         Future<Boolean> future = Bukkit.getScheduler().callSyncMethod(
                 AppleBridgePlugin.this,
                 () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)
@@ -346,13 +345,13 @@ public final class AppleBridgePlugin extends JavaPlugin {
                 writeResponse(exchange, 200, "OK");
             } catch (InterruptedException exception) {
                 Thread.currentThread().interrupt();
-                getLogger().warning("HTTP запрос был прерван: " + exception.getMessage());
+                getLogger().warning("HTTP request was interrupted: " + exception.getMessage());
                 writeResponse(exchange, 500, "Interrupted");
             } catch (ExecutionException exception) {
-                getLogger().warning("Ошибка выполнения команды: " + exception.getMessage());
+                getLogger().warning("Command execution failed: " + exception.getMessage());
                 writeResponse(exchange, 500, "Execution Error");
             } catch (Exception exception) {
-                getLogger().warning("Ошибка обработки HTTP запроса: " + exception.getMessage());
+                getLogger().warning("Failed to handle HTTP request: " + exception.getMessage());
                 writeResponse(exchange, 500, "Internal Server Error");
             } finally {
                 exchange.close();
@@ -379,7 +378,7 @@ public final class AppleBridgePlugin extends JavaPlugin {
                 String response = String.join("\n", logs);
                 writeResponse(exchange, 200, response.isBlank() ? "No logs yet" : response);
             } catch (Exception exception) {
-                getLogger().warning("Ошибка выдачи логов HTTP API: " + exception.getMessage());
+                getLogger().warning("Failed to return logs through HTTP API: " + exception.getMessage());
                 writeResponse(exchange, 500, "Internal Server Error");
             } finally {
                 exchange.close();
