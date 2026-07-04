@@ -95,6 +95,57 @@ secret: "CHANGE_ME"
 log-buffer-size: 200
 ```
 
+### 6. Linux setup notes
+
+If you are hosting your server on Linux, installation is the same, but the most common paths look like this:
+
+```text
+/home/container/plugins/
+/home/container/plugins/AppleBridge/config.yml
+/home/container/logs/latest.log
+```
+
+This usually applies to:
+
+- Ubuntu or Debian VPS servers
+- Pterodactyl hosting
+- Docker or other container setups
+
+If your bot runs on the same Linux machine as Minecraft, prefer:
+
+```text
+http://127.0.0.1:PORT/execute
+```
+
+This keeps the API local and avoids exposing it to the internet.
+
+## Notes for Linux users
+
+If your Minecraft server runs on Linux, the plugin works the same way as on Windows.
+
+Typical Linux paths:
+
+```text
+/home/container/plugins/
+/home/container/plugins/AppleBridge/config.yml
+/home/container/logs/latest.log
+```
+
+This is common for:
+
+- self-hosted Paper servers on Ubuntu or Debian
+- VPS-based servers
+- Pterodactyl hosting
+- Docker or container-based setups
+
+If your bot or script runs on the same machine as the Minecraft server, the safest setup is usually:
+
+```text
+http://127.0.0.1:PORT/execute
+```
+
+This avoids exposing the API publicly.
+
 ## Configuration
 
 ### `enabled`
@@ -241,6 +292,33 @@ Invoke-RestMethod -Uri 'http://127.0.0.1:8080/logs?limit=20' `
   -Headers @{ Authorization = 'YOUR_SECRET' }
 ```
 
+## Testing on Linux with `curl`
+
+### Execute a command
+
+```bash
+curl -X POST http://127.0.0.1:8080/execute \
+  -H "Authorization: YOUR_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"command":"say hello from linux"}'
+```
+
+### Read recent logs
+
+```bash
+curl http://127.0.0.1:8080/logs?limit=20 \
+  -H "Authorization: YOUR_SECRET"
+```
+
+### If your bot runs on another machine
+
+```bash
+curl -X POST http://YOUR_SERVER_IP:8080/execute \
+  -H "Authorization: YOUR_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"command":"list"}'
+```
+
 ## Connecting a Discord bot
 
 AppleBridge itself does not include a Discord bot.  
@@ -281,6 +359,18 @@ If possible:
 - run the bot and Minecraft on the same machine
 - use `127.0.0.1`
 - restrict firewall access by IP
+
+For Linux servers, also check:
+
+- `ufw`, `iptables`, or `firewalld`
+- your hosting provider firewall
+- Docker or panel port mapping
+
+If you expose the API outside the machine, make sure:
+
+- the AppleBridge port is actually opened in your hosting panel
+- the same port is allowed in the Linux firewall
+- Docker or panel port forwarding points to the correct internal port
 
 ## Common issues
 

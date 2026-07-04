@@ -44,6 +44,50 @@ Should also work on `Purpur` for the same version ranges.
 5. Configure the API and secret token.
 6. Restart the server or run `/applebridge reload`.
 
+## Linux installation notes
+
+If you run Minecraft on Linux, installation is the same, but the most common paths are:
+
+```text
+/home/container/plugins/
+/home/container/plugins/AppleBridge/config.yml
+/home/container/logs/latest.log
+```
+
+This is common on:
+
+- Ubuntu or Debian VPS servers
+- Pterodactyl hosting
+- Docker or container setups
+
+If your bot is on the same Linux machine, use:
+
+```text
+http://127.0.0.1:PORT/execute
+```
+
+This is the safest and simplest setup.
+
+## Notes for Linux users
+
+If your Minecraft server runs on Linux, the plugin works the same way as on Windows.
+
+Typical Linux paths:
+
+```text
+/home/container/plugins/
+/home/container/plugins/AppleBridge/config.yml
+/home/container/logs/latest.log
+```
+
+If your bot or script runs on the same machine as the Minecraft server, the safest setup is usually:
+
+```text
+http://127.0.0.1:PORT/execute
+```
+
+This avoids exposing the API publicly.
+
 ## Default config
 
 ```yml
@@ -76,8 +120,8 @@ Size of the in-memory recent log buffer.
 
 ## Commands
 
-- `/applebridge reload` — reload config and restart API
-- `/applebridge status` — show API status
+- `/applebridge reload` - reload config and restart API
+- `/applebridge status` - show API status
 
 ## API
 
@@ -136,6 +180,33 @@ Invoke-RestMethod -Uri 'http://127.0.0.1:8080/logs?limit=20' `
   -Headers @{ Authorization = 'YOUR_SECRET' }
 ```
 
+## Testing on Linux with `curl`
+
+### Execute a command
+
+```bash
+curl -X POST http://127.0.0.1:8080/execute \
+  -H "Authorization: YOUR_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"command":"say hello from linux"}'
+```
+
+### Read recent logs
+
+```bash
+curl http://127.0.0.1:8080/logs?limit=20 \
+  -H "Authorization: YOUR_SECRET"
+```
+
+### If your bot runs on another machine
+
+```bash
+curl -X POST http://YOUR_SERVER_IP:8080/execute \
+  -H "Authorization: YOUR_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"command":"list"}'
+```
+
 ## Security
 
 Because this plugin can execute console commands, you should always:
@@ -148,6 +219,16 @@ If possible:
 - run the bot and Minecraft on the same machine
 - use `127.0.0.1`
 - restrict firewall access by IP
+
+For Linux servers, also check:
+- `ufw`, `iptables`, or `firewalld`
+- hosting firewall rules
+- Docker or panel port mapping
+
+If the API should be reachable externally, make sure the port is opened in both:
+
+- your hosting panel
+- your Linux firewall configuration
 
 ## Common issues
 
